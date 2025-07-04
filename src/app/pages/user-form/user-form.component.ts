@@ -22,6 +22,7 @@ export class UserFormComponent implements OnInit {
   isUserLoggedIn = false;
   currentUser: UserInfo | null = null;
   private readonly MAX_DISTANCE_METERS = 1000; // Maksimum izin verilen mesafe (metre)
+  logdata: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -158,6 +159,7 @@ export class UserFormComponent implements OnInit {
       this.messageService.error('Konum bilgisi alınamadı. Lütfen konum izni verdiğinizden emin olun.');
       return;
     }
+    this.logdata += `QR kodun bulunduğu konum: ${qrLocation.latitude}, ${qrLocation.longitude}<br> Kullanıcının bulunduğu konum: ${this.location.latitude}, ${this.location.longitude}<br> `;
 
     const distance = this.calcCrow(
       this.location.latitude,
@@ -166,6 +168,7 @@ export class UserFormComponent implements OnInit {
       qrLocation.longitude
     );
     console.log(distance, this.location, qrLocation);
+    this.logdata += `QR kodun bulunduğu konum: ${qrLocation.latitude}, ${qrLocation.longitude}<br> Kullanıcının bulunduğu konum: ${this.location.latitude}, ${this.location.longitude}<br> Hesaplanan mesafe: ${distance}m<br> `;
 
     if (distance > this.MAX_DISTANCE_METERS) {
       this.messageService.error(`Etki alanınızın dışındasınız.`);
