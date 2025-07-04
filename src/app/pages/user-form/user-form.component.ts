@@ -21,7 +21,7 @@ export class UserFormComponent implements OnInit {
   qrData: QrData | null = null;
   isUserLoggedIn = false;
   currentUser: UserInfo | null = null;
-  private readonly MAX_DISTANCE_METERS = 100; // Maksimum izin verilen mesafe (metre)
+  private readonly MAX_DISTANCE_METERS = 1000; // Maksimum izin verilen mesafe (metre)
 
   constructor(
     private fb: FormBuilder,
@@ -168,7 +168,7 @@ export class UserFormComponent implements OnInit {
     console.log(distance, this.location, qrLocation);
 
     if (distance > this.MAX_DISTANCE_METERS) {
-      this.messageService.error(`QR kodun bulunduğu konumdan çok uzaktasınız. Maksimum mesafe: ${this.MAX_DISTANCE_METERS}m`);
+      this.messageService.error(`Etki alanınızın dışındasınız.`);
       return;
     }
 
