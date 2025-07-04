@@ -2,7 +2,7 @@
   <!-- Şifre Girişi -->
   <div *ngIf="!isAuthenticated" class="max-w-md mx-auto">
     <div class="bg-white p-4 md:p-6 rounded-lg shadow-md">
-      <h2 class="text-xl md:text-2xl font-bold mb-4">Log Görüntüleyici</h2>
+      <h2 (dblclick)="dblClick.emit(true)" class="text-xl md:text-2xl font-bold mb-4">Log Görüntüleyici</h2>
       <div class="mb-4">
         <label class="block text-gray-700 text-sm md:text-base mb-2">Şifre</label>
         <input 
@@ -26,7 +26,7 @@
   <!-- Log Tablosu -->
   <div *ngIf="isAuthenticated" class="space-y-4">
     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-      <h2 class="text-xl md:text-2xl font-bold">Kullanıcı Logları</h2>
+      <h2 (dblclick)="dblClick.emit(false)" class="text-xl md:text-2xl font-bold">Kullanıcı Logları</h2>
       
       <!-- Filtreler -->
       <div class="flex flex-wrap items-center gap-4">

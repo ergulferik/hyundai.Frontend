@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
@@ -27,6 +27,8 @@ export class LogViewerComponent implements OnInit {
   // Tarih filtreleri
   startDate: string;
   endDate: string;
+
+  @Output() dblClick = new EventEmitter<boolean>();
 
   constructor(private authService: AuthService) {
     // Son 1 günlük varsayılan tarih aralığını ayarla

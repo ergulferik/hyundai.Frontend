@@ -5,11 +5,11 @@ import { AuthService } from '../../services/auth.service';
 import { MessageService } from '../../services/message.service';
 import { GeoLocation, LoginPayload, QrData, UserInfo } from '../../models/auth.models';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
-
+import { LogViewerComponent } from '../log-viewer/log-viewer.component';
 @Component({
   selector: 'app-user-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ZXingScannerModule],
+  imports: [CommonModule, ReactiveFormsModule, ZXingScannerModule, LogViewerComponent],
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss']
 })
@@ -23,7 +23,7 @@ export class UserFormComponent implements OnInit {
   currentUser: UserInfo | null = null;
   private readonly MAX_DISTANCE_METERS = 1000; // Maksimum izin verilen mesafe (metre)
   logdata: string = '';
-
+  logMode = false;
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
