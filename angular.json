@@ -19,6 +19,7 @@
           "options": {
             "outputPath": "docs",
             "browser": "src/main.ts",
+            "baseHref": "/hyundai.Frontend/",
             "polyfills": [
               "zone.js"
             ],
