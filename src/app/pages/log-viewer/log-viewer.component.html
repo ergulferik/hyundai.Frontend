@@ -1,0 +1,161 @@
+<div class="container mx-auto p-4 md:p-6">
+  <!-- Şifre Girişi -->
+  <div *ngIf="!isAuthenticated" class="max-w-md mx-auto">
+    <div class="bg-white p-4 md:p-6 rounded-lg shadow-md">
+      <h2 class="text-xl md:text-2xl font-bold mb-4">Log Görüntüleyici</h2>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm md:text-base mb-2">Şifre</label>
+        <input 
+          type="password" 
+          [(ngModel)]="password"
+          (keyup.enter)="checkPassword()"
+          class="w-full px-3 py-2 border rounded-lg text-sm md:text-base"
+          placeholder="Şifreyi giriniz"
+        >
+      </div>
+      <button 
+        (click)="checkPassword()"
+        class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 text-sm md:text-base"
+      >
+        Giriş
+      </button>
+      <p *ngIf="passwordError" class="text-red-500 mt-2 text-sm md:text-base">Hatalı şifre!</p>
+    </div>
+  </div>
+
+  <!-- Log Tablosu -->
+  <div *ngIf="isAuthenticated" class="space-y-4">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+      <h2 class="text-xl md:text-2xl font-bold">Kullanıcı Logları</h2>
+      
+      <!-- Filtreler -->
+      <div class="flex flex-wrap items-center gap-4">
+        <!-- Tarih Filtreleri -->
+        <div class="flex items-center gap-2">
+          <input 
+            type="date" 
+            [(ngModel)]="startDate"
+            (change)="onDateFilterChange()"
+            class="border rounded px-2 py-1 text-sm"
+            placeholder="Başlangıç Tarihi"
+          >
+          <span class="text-sm">-</span>
+          <input 
+            type="date" 
+            [(ngModel)]="endDate"
+            (change)="onDateFilterChange()"
+            class="border rounded px-2 py-1 text-sm"
+            placeholder="Bitiş Tarihi"
+          >
+        </div>
+
+        <!-- Sayfa Boyutu Seçimi -->
+        <div class="flex items-center space-x-2 text-sm md:text-base">
+          <span>Göster:</span>
+          <select 
+            [(ngModel)]="pageSize" 
+            (change)="onPageSizeChange()"
+            class="border rounded px-2 py-1"
+          >
+            <option [value]="10">10</option>
+            <option [value]="20">20</option>
+            <option [value]="50">50</option>
+          </select>
+          <span>kayıt</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobil Görünüm -->
+    <div class="md:hidden space-y-4">
+      <div *ngFor="let log of logs" class="bg-white p-4 rounded-lg shadow-md">
+        <div class="grid grid-cols-2 gap-2">
+          <div class="font-semibold">İsim:</div>
+          <div>{{log.user.name}} {{log.user.surname}}</div>
+          
+          <div class="font-semibold">Telefon:</div>
+          <div>{{log.user.phone}}</div>
+          
+          <div class="font-semibold">İşlem:</div>
+          <div>{{log.action}}</div>
+          
+          <div class="font-semibold">Tarih:</div>
+          <div>{{log.loginTime | date:'dd.MM.yyyy HH:mm:ss'}}</div>
+          
+          <div class="font-semibold">Konum:</div>
+          <div>{{log.currentLocation.latitude}}, {{log.currentLocation.longitude}}</div>
+
+          <div class="font-semibold">Doğruluk:</div>
+          <div>{{log.currentLocation.accuracy}} metre</div>
+
+          <div class="font-semibold">QR Kodu:</div>
+          <div>{{getQrIdentifier(log.qrData)}}</div>
+
+          <div class="font-semibold">IP Adresi:</div>
+          <div>{{log.ipAddress}}</div>
+
+          <div class="font-semibold">Durum:</div>
+          <div>{{log.success ? 'Başarılı' : 'Başarısız'}}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Masaüstü Görünüm -->
+    <div class="hidden md:block overflow-x-auto">
+      <table class="min-w-full bg-white rounded-lg overflow-hidden shadow-md">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-4 py-2 text-left">İsim</th>
+            <th class="px-4 py-2 text-left">Telefon</th>
+            <th class="px-4 py-2 text-left">İşlem</th>
+            <th class="px-4 py-2 text-left">Tarih</th>
+            <th class="px-4 py-2 text-left">Konum</th>
+            <th class="px-4 py-2 text-left">Doğruluk</th>
+            <th class="px-4 py-2 text-left">QR Kodu</th>
+            <th class="px-4 py-2 text-left">IP Adresi</th>
+            <th class="px-4 py-2 text-left">Durum</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of logs" class="border-b hover:bg-gray-50">
+            <td class="px-4 py-2">{{log.user.name}} {{log.user.surname}}</td>
+            <td class="px-4 py-2">{{log.user.phone}}</td>
+            <td class="px-4 py-2">{{log.action}}</td>
+            <td class="px-4 py-2">{{log.loginTime | date:'dd.MM.yyyy HH:mm:ss'}}</td>
+            <td class="px-4 py-2">{{log.currentLocation.latitude}}, {{log.currentLocation.longitude}}</td>
+            <td class="px-4 py-2">{{log.currentLocation.accuracy}} metre</td>
+            <td class="px-4 py-2">{{getQrIdentifier(log.qrData)}}</td>
+            <td class="px-4 py-2">{{log.ipAddress}}</td>
+            <td class="px-4 py-2">{{log.success ? 'Başarılı' : 'Başarısız'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Sayfalama -->
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 mt-4">
+      <div class="text-sm md:text-base">
+        Toplam: {{totalLogs}} kayıt
+      </div>
+      <div class="flex gap-2">
+        <button 
+          (click)="previousPage()" 
+          [disabled]="currentPage === 0"
+          class="px-3 md:px-4 py-1 md:py-2 bg-gray-200 rounded-lg disabled:opacity-50 text-sm md:text-base"
+        >
+          Önceki
+        </button>
+        <span class="px-3 md:px-4 py-1 md:py-2 text-sm md:text-base">
+          Sayfa {{currentPage + 1}}
+        </span>
+        <button 
+          (click)="nextPage()"
+          [disabled]="!hasMore"
+          class="px-3 md:px-4 py-1 md:py-2 bg-gray-200 rounded-lg disabled:opacity-50 text-sm md:text-base"
+        >
+          Sonraki
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

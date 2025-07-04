@@ -1,0 +1,124 @@
+<div class="min-h-screen bg-gray-50 flex flex-col">
+  <header class="bg-white shadow-sm">
+    <div class="container mx-auto px-4 py-4 md:py-6">
+      <h1 class="text-xl md:text-2xl font-bold text-gray-900">Kullanıcı Girişi</h1>
+    </div>
+  </header>
+
+  <main class="flex-1 container mx-auto px-4 py-6 md:py-8">
+    <div class="max-w-lg mx-auto">
+      <!-- Kullanıcı Giriş Durumu -->
+      <div class="user-status mb-6" *ngIf="isUserLoggedIn && currentUser">
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-lg font-medium text-green-800">Hoş geldiniz!</h3>
+              <p class="text-green-700 mt-1">
+                {{ currentUser.name }} {{ currentUser.surname }}
+              </p>
+              <p class="text-sm text-green-600 mt-1">
+                {{ currentUser.phone }}
+              </p>
+            </div>
+            <button 
+              type="button"
+              class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md"
+              (click)="logout()"
+              [disabled]="isLoading"
+            >
+              <span *ngIf="!isLoading">Çıkış Yap</span>
+              <span *ngIf="isLoading">Çıkış Yapılıyor...</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-container" *ngIf="!isUserLoggedIn">
+        <!-- Kişisel Bilgi Formu -->
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()" *ngIf="!showQrScanner">
+          <h2>Kişisel Bilgileriniz</h2>
+          
+          <div class="form-group">
+            <label for="name">Ad</label>
+            <input 
+              id="name"
+              type="text"
+              formControlName="name"
+              [class.is-invalid]="isFieldInvalid('name')"
+            >
+            <div class="error-message" *ngIf="isFieldInvalid('name')">
+              Ad alanı zorunludur ve en az 2 karakter olmalıdır.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="surname">Soyad</label>
+            <input 
+              id="surname"
+              type="text"
+              formControlName="surname"
+              [class.is-invalid]="isFieldInvalid('surname')"
+            >
+            <div class="error-message" *ngIf="isFieldInvalid('surname')">
+              Soyad alanı zorunludur ve en az 2 karakter olmalıdır.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Telefon</label>
+            <input 
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              [class.is-invalid]="isFieldInvalid('phone')"
+              placeholder="05XXXXXXXXX"
+            >
+            <div class="error-message" *ngIf="isFieldInvalid('phone')">
+              Geçerli bir telefon numarası giriniz (05XXXXXXXXX formatında).
+            </div>
+          </div>
+
+          <button 
+            type="button" 
+            class="primary-button"
+            [disabled]="!isPersonalInfoValid()"
+            (click)="proceedToQrScan()"
+          >
+            QR Kod Okutmaya Geç
+          </button>
+        </form>
+
+        <!-- QR Kod Tarama Bölümü -->
+        <div class="qr-scanner-container" *ngIf="showQrScanner">
+          <h2>QR Kod Tarama</h2>
+          
+          <div class="qr-preview">
+            <zxing-scanner
+              [enable]="showQrScanner"
+              (scanSuccess)="onQrCodeScanned($event)"
+            ></zxing-scanner>
+          </div>
+
+          <div class="scanned-result" *ngIf="userForm.get('qrCode')?.value">
+            <p>QR Kod okunuyor ve konum kontrolü yapılıyor...</p>
+          </div>
+
+          <div class="button-group">
+            <button 
+              type="button" 
+              class="secondary-button"
+              (click)="backToPersonalInfo()"
+            >
+              Geri Dön
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="loading-overlay" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>İşleminiz gerçekleştiriliyor...</p>
+      </div>
+    </div>
+  </main>
+</div> 

@@ -1,0 +1,45 @@
+/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// Snackbar Stilleri
+.success-snackbar {
+  background: #4caf50;
+  color: white;
+  
+  .mdc-snackbar__label {
+    color: white;
+  }
+  
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+
+.error-snackbar {
+  background: #f44336;
+  color: white;
+  
+  .mdc-snackbar__label {
+    color: white;
+  }
+  
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+
+.info-snackbar {
+  background: #2196f3;
+  color: white;
+  
+  .mdc-snackbar__label {
+    color: white;
+  }
+  
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
